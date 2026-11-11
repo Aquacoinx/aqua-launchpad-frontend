@@ -1,19 +1,398 @@
  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aqua Launchpad | Launch on Solana</title>
+<meta name="theme-color" content="#071321">
+<meta name="description" content="Create and discover tokens on Aqua Launchpad.">
+
+<style>
+:root {
+  --bg:#071321;
+  --panel:#0d1e30;
+  --panel2:#10263b;
+  --blue:#168cff;
+  --cyan:#29d5e8;
+  --text:#f2f7ff;
+  --muted:#8da5bc;
+  --border:#20384e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.nav{
+  min-height:75px;padding:0 6%;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:#071321f2;z-index:10;
+}
+.logo{font-size:23px;font-weight:800;letter-spacing:-1px}
+.logo span{color:var(--cyan)}
+.navlinks{display:flex;gap:27px}
+.navlinks a{color:var(--muted);text-decoration:none;font-size:14px}
+.navlinks a:hover{color:white}
+.btn{
+  border:0;border-radius:10px;padding:13px 19px;
+  background:linear-gradient(110deg,var(--blue),var(--cyan));
+  color:white;font-weight:700;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn-outline{
+  background:transparent;border:1px solid var(--blue);
+  color:#70bdff;
+}
+.container{width:min(1120px,90%);margin:auto}
+.hero{padding:85px 0 65px;text-align:center}
+.tag{
+  display:inline-block;border:1px solid #17669a;
+  background:#0d2940;color:#65c9ff;border-radius:30px;
+  padding:8px 14px;font-size:12px;margin-bottom:20px;
+}
+h1{font-size:clamp(38px,7vw,67px);line-height:1.08;
+  letter-spacing:-2px;margin:0 auto 20px;max-width:800px}
+.gradient{
+  background:linear-gradient(90deg,#36a5ff,#42e3df);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:var(--muted);max-width:590px;margin:0 auto 28px;
+  line-height:1.8;font-size:16px}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px;
+  margin:35px auto 0;max-width:750px
+}
+.stat{padding:18px;background:var(--panel);border:1px solid var(--border);
+  border-radius:13px}
+.stat strong{display:block;font-size:22px;margin-bottom:6px}
+.stat small{color:var(--muted)}
+.section{padding:45px 0 65px}
+.section-head{display:flex;align-items:center;justify-content:space-between;
+  gap:15px;margin-bottom:22px}
+h2{font-size:27px;margin:0}
+.subtitle{color:var(--muted);font-size:14px;margin-top:8px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.token{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:15px;padding:20px;min-width:0
+}
+.token-top{display:flex;align-items:center;gap:12px;margin-bottom:17px}
+.token-icon{
+  width:46px;height:46px;border-radius:13px;
+  display:grid;place-items:center;background:#123858;
+  color:#64caff;font-size:19px;font-weight:800
+}
+.token-name{font-weight:700}
+.token-symbol{font-size:12px;color:var(--muted);margin-top:5px}
+.token p{font-size:13px;color:var(--muted);line-height:1.6}
+.token-foot{display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--border);padding-top:14px;margin-top:15px}
+.pill{font-size:11px;color:#66d8bd;background:#10382f;
+  padding:6px 9px;border-radius:20px}
+.token-foot button{font-size:12px;padding:9px 12px}
+.create-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:35px;
+  background:var(--panel);border:1px solid var(--border);
+  padding:30px;border-radius:18px
+}
+.create-info h2{font-size:31px;line-height:1.2}
+.create-info p{color:var(--muted);line-height:1.8;font-size:14px}
+.feature{margin-top:20px;color:#b7d5e8;font-size:14px}
+.feature div{margin:13px 0}
+.form label{display:block;font-size:13px;color:#c2d5e6;margin:15px 0 8px}
+.form input,.form textarea,.form select{
+  width:100%;background:#081726;color:white;
+  border:1px solid var(--border);border-radius:9px;
+  padding:13px;outline:none
+}
+.form input:focus,.form textarea:focus{border-color:var(--blue)}
+.form textarea{resize:vertical;min-height:80px}
+.tax-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
+.notice{
+  background:#142b40;border:1px solid #245276;color:#a9d7fa;
+  border-radius:10px;padding:13px;font-size:12px;line-height:1.6;
+  margin-top:15px
+}
+.footer{
+  border-top:1px solid var(--border);padding:28px 0;
+  color:var(--muted);font-size:12px;text-align:center
+}
+.wallet-status{
+  font-size:12px;color:var(--muted);margin-top:12px;
+  overflow-wrap:anywhere;line-height:1.7
+}
+.wallet-status.connected{color:#66d8bd}
+.wallet-actions{
+  display:flex;justify-content:center;gap:10px;
+  flex-wrap:wrap;margin-top:12px
+}
+.wallet-actions button{font-size:12px;padding:10px 14px}
+.empty{color:var(--muted);font-size:13px;padding:15px 0}
+@media(max-width:750px){
+  .nav{padding:0 5%;height:68px}
+  .navlinks{display:none}
+  .logo{font-size:21px}
+  .nav .btn{padding:11px 12px;font-size:12px}
+  .hero{padding:65px 0 45px}
+  .stats{gap:8px}
+  .stat{padding:13px 7px}
+  .stat strong{font-size:17px}
+  .stat small{font-size:10px}
+  .cards{grid-template-columns:1fr}
+  .create-wrap{grid-template-columns:1fr;padding:21px}
+  .section-head{align-items:flex-start}
+  h2{font-size:23px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="nav">
+  <div class="logo">AQUA<span>.</span></div>
+
+  <nav class="navlinks">
+    <a href="#home">Home</a>
+    <a href="#launches">Explore</a>
+    <a href="#create">Create Token</a>
+  </nav>
+
+  <button class="btn" id="walletBtn" onclick="connectWallet()">
+    Connect Wallet
+  </button>
+</header>
+
+<main>
+
+<section class="hero container" id="home">
+  <div class="tag">SOLANA TOKEN LAUNCHPAD</div>
+
+  <h1>
+    Discover the next big thing on
+    <span class="gradient">Solana.</span>
+  </h1>
+
+  <p>
+    Create tokens, discover new projects and trade through a
+    transparent bonding-curve launch system.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#launches"><button class="btn">Explore Tokens</button></a>
+    <a href="#create"><button class="btn btn-outline">Create a Token</button></a>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong>1B</strong>
+      <small>Token supply</small>
+    </div>
+    <div class="stat">
+      <strong>1–10%</strong>
+      <small>Creator tax range</small>
+    </div>
+    <div class="stat">
+      <strong>Solana</strong>
+      <small>Blockchain</small>
+    </div>
+  </div>
+
+  <div class="wallet-status" id="walletStatus">
+    Wallet not connected
+  </div>
+
+  <div class="wallet-actions" id="walletActions" hidden>
+    <button class="btn btn-outline" onclick="disconnectWallet()">
+      Disconnect Wallet
+    </button>
+  </div>
+</section>
+
+<section class="section container" id="launches">
+  <div class="section-head">
+    <div>
+      <h2>Explore Launches</h2>
+      <div class="subtitle">Discover projects launching on Aqua.</div>
+    </div>
+    <span class="pill">Devnet Preview</span>
+  </div>
+
+  <div class="cards" id="tokenCards">
+
+    <article class="token">
+      <div class="token-top">
+        <div class="token-icon">A</div>
+        <div>
+          <div class="token-name">Aqua Demo</div>
+          <div class="token-symbol">$AQUA</div>
+        </div>
+      </div>
+      <p>Sample project showing how token listings will appear.</p>
+      <div class="token-foot">
+        <span class="pill">Demo listing</span>
+        <button class="btn btn-outline" onclick="demoMessage()">View</button>
+      </div>
+    </article>
+
+    <article class="token">
+      <div class="token-top">
+        <div class="token-icon">W</div>
+        <div>
+          <div class="token-name">Wave Demo</div>
+          <div class="token-symbol">$WAVE</div>
+        </div>
+      </div>
+      <p>Example token card for the upcoming launch marketplace.</p>
+      <div class="token-foot">
+        <span class="pill">Demo listing</span>
+        <button class="btn btn-outline" onclick="demoMessage()">View</button>
+      </div>
+    </article>
+
+    <article class="token">
+      <div class="token-top">
+        <div class="token-icon">B</div>
+        <div>
+          <div class="token-name">Blue Demo</div>
+          <div class="token-symbol">$BLUE</div>
+        </div>
+      </div>
+      <p>Newly launched token listings will appear in this section.</p>
+      <div class="token-foot">
+        <span class="pill">Demo listing</span>
+        <button class="btn btn-outline" onclick="demoMessage()">View</button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="section container" id="create">
+  <div class="create-wrap">
+
+    <div class="create-info">
+      <div class="tag">PERMISSIONLESS CREATION</div>
+
+      <h2>Launch your token on <span class="gradient">Aqua.</span></h2>
+
+      <p>
+        Create your project with a name, symbol, description and
+        independent buy and sell tax settings.
+      </p>
+
+      <div class="feature">
+        <div>✓ 1 billion total token supply</div>
+        <div>✓ 80% bonding curve allocation</div>
+        <div>✓ 20% liquidity allocation</div>
+        <div>✓ Creator tax settings from 1% to 10%</div>
+        <div>✓ SOL-based bonding curve design</div>
+      </div>
+
+      <div class="notice">
+        This is currently a frontend preview. Token creation is not
+        yet submitted to the blockchain.
+      </div>
+    </div>
+
+    <div class="form">
+      <h2>Create Token</h2>
+
+      <label for="tokenName">Token name</label>
+      <input id="tokenName" maxlength="40" placeholder="e.g. Aqua Coin">
+
+      <label for="tokenSymbol">Token symbol</label>
+      <input id="tokenSymbol" maxlength="10" placeholder="e.g. AQUA">
+
+      <label for="tokenDescription">Description</label>
+      <textarea id="tokenDescription" maxlength="250"
+        placeholder="Describe your project"></textarea>
+
+      <div class="tax-grid">
+        <div>
+          <label for="buyTax">Buy tax</label>
+          <select id="buyTax">
+            <option value="1">1%</option>
+            <option value="2">2%</option>
+            <option value="3">3%</option>
+            <option value="4">4%</option>
+            <option value="5" selected>5%</option>
+            <option value="6">6%</option>
+            <option value="7">7%</option>
+            <option value="8">8%</option>
+            <option value="9">9%</option>
+            <option value="10">10%</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="sellTax">Sell tax</label>
+          <select id="sellTax">
+            <option value="1">1%</option>
+            <option value="2">2%</option>
+            <option value="3">3%</option>
+            <option value="4">4%</option>
+            <option value="5" selected>5%</option>
+            <option value="6">6%</option>
+            <option value="7">7%</option>
+            <option value="8">8%</option>
+            <option value="9">9%</option>
+            <option value="10">10%</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" style="width:100%;margin-top:20px"
+        onclick="previewToken()">Preview Token</button>
+
+      <div class="note">
+        Tax settings shown here are previews and are not yet locked
+        on-chain.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    AQUA LAUNCHPAD · Built for Solana · Devnet Preview
+  </div>
+</footer>
+
 <script>
 let connectedProvider = null;
 let connectedWalletName = null;
+let accountChangeHandler = null;
+let disconnectHandler = null;
 
 function getAvailableWallets() {
   const wallets = [];
 
   const phantom = window.phantom?.solana;
+
   if (phantom?.isPhantom) {
-    wallets.push({ name: "Phantom", provider: phantom });
+    wallets.push({
+      name: "Phantom",
+      provider: phantom
+    });
   }
 
   const okx = window.okxwallet?.solana;
+
   if (okx) {
-    wallets.push({ name: "OKX Wallet", provider: okx });
+    wallets.push({
+      name: "OKX Wallet",
+      provider: okx
+    });
   }
 
   return wallets;
@@ -32,11 +411,13 @@ async function connectWallet() {
 
   if (wallets.length === 0) {
     status.textContent =
-      "No compatible wallet detected. Open Aqua Launchpad inside Phantom or OKX Wallet's browser.";
+      "No compatible wallet detected. Open this website in Phantom or OKX Wallet's built-in browser.";
+
     alert(
       "No compatible Solana wallet found.\n\n" +
-      "Open this website using the browser inside Phantom or OKX Wallet."
+      "Please open Aqua Launchpad inside Phantom or OKX Wallet's browser."
     );
+
     return;
   }
 
@@ -53,9 +434,13 @@ async function connectWallet() {
     );
 
     if (choice === "1") {
-      selectedWallet = wallets.find(w => w.name === "Phantom");
+      selectedWallet = wallets.find(
+        wallet => wallet.name === "Phantom"
+      );
     } else if (choice === "2") {
-      selectedWallet = wallets.find(w => w.name === "OKX Wallet");
+      selectedWallet = wallets.find(
+        wallet => wallet.name === "OKX Wallet"
+      );
     } else {
       return;
     }
@@ -71,8 +456,10 @@ async function connectWallet() {
     btn.textContent = "Connecting...";
 
     const response = await selectedWallet.provider.connect();
+
     const publicKey =
-      response?.publicKey || selectedWallet.provider.publicKey;
+      response?.publicKey ||
+      selectedWallet.provider.publicKey;
 
     if (!publicKey) {
       throw new Error("Wallet did not return a public address.");
@@ -90,8 +477,22 @@ async function connectWallet() {
       connectedWalletName + " connected: " + address +
       " · Check that your wallet is set to Devnet.";
 
-    connectedProvider.on?.("accountChanged", handleAccountChanged);
-    connectedProvider.on?.("disconnect", handleWalletDisconnect);
+    status.classList.add("connected");
+
+    accountChangeHandler = handleAccountChanged;
+    disconnectHandler = handleWalletDisconnect;
+
+    connectedProvider.on?.(
+      "accountChanged",
+      accountChangeHandler
+    );
+
+    connectedProvider.on?.(
+      "disconnect",
+      disconnectHandler
+    );
+
+    document.getElementById("walletActions").hidden = false;
 
   } catch (error) {
     connectedProvider = null;
@@ -99,12 +500,15 @@ async function connectWallet() {
 
     btn.textContent = "Connect Wallet";
     status.textContent = "Wallet connection was not completed.";
+    status.classList.remove("connected");
 
     console.error("Wallet connection error:", error);
 
     alert(
-      error?.message || "Could not connect wallet. Please try again."
+      error?.message ||
+      "Could not connect wallet. Please try again."
     );
+
   } finally {
     btn.disabled = false;
   }
@@ -132,21 +536,48 @@ function handleWalletDisconnect() {
   connectedProvider = null;
   connectedWalletName = null;
 
-  document.getElementById("walletBtn").textContent = "Connect Wallet";
-  document.getElementById("walletStatus").textContent =
-    "Wallet not connected";
+  document.getElementById("walletBtn").textContent =
+    "Connect Wallet";
+
+  const status = document.getElementById("walletStatus");
+
+  status.textContent = "Wallet not connected";
+  status.classList.remove("connected");
+
+  document.getElementById("walletActions").hidden = true;
 }
 
 async function disconnectWallet() {
-  try {
-    if (connectedProvider) {
-      await connectedProvider.disconnect();
-    }
-  } catch (error) {
-    console.error("Disconnect error:", error);
+  const provider = connectedProvider;
+
+  if (!provider) {
+    handleWalletDisconnect();
+    return;
   }
 
-  handleWalletDisconnect();
+  try {
+    if (accountChangeHandler) {
+      provider.removeListener?.(
+        "accountChanged",
+        accountChangeHandler
+      );
+    }
+
+    if (disconnectHandler) {
+      provider.removeListener?.(
+        "disconnect",
+        disconnectHandler
+      );
+    }
+
+    await provider.disconnect();
+
+  } catch (error) {
+    console.error("Disconnect error:", error);
+
+  } finally {
+    handleWalletDisconnect();
+  }
 }
 
 function demoMessage() {
@@ -157,13 +588,21 @@ function demoMessage() {
 }
 
 function previewToken() {
-  const name = document.getElementById("tokenName").value.trim();
-  const symbol = document.getElementById("tokenSymbol")
-    .value.trim().toUpperCase();
-  const description = document.getElementById("tokenDescription")
-    .value.trim();
-  const buy = document.getElementById("buyTax").value;
-  const sell = document.getElementById("sellTax").value;
+  const name =
+    document.getElementById("tokenName").value.trim();
+
+  const symbol =
+    document.getElementById("tokenSymbol")
+      .value.trim().toUpperCase();
+
+  const description =
+    document.getElementById("tokenDescription").value.trim();
+
+  const buy =
+    document.getElementById("buyTax").value;
+
+  const sell =
+    document.getElementById("sellTax").value;
 
   if (!name || !symbol) {
     alert("Please enter a token name and symbol.");
@@ -181,3 +620,6 @@ function previewToken() {
   );
 }
 </script>
+
+</body>
+</html>
